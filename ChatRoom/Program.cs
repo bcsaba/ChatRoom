@@ -1,8 +1,12 @@
+using Microsoft.EntityFrameworkCore;
+
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
+builder.Services.AddEntityFrameworkNpgsql().AddDbContext<Repository.BloggingContext>(options =>
+    options.UseNpgsql());
 
 var app = builder.Build();
 
