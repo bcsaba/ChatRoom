@@ -2,7 +2,7 @@
 
 namespace Repository;
 
-public interface IBloggingContext
+public interface IChatRoomContext
 {
     DbSet<User> Users { get; set; }
     DbSet<RoomEvent> RoomEvents { get; set; }
@@ -15,9 +15,9 @@ public interface IBloggingContext
     Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
 
-public class BloggingContext : DbContext, IBloggingContext
+public class ChatRoomContext : DbContext, IChatRoomContext
 {
-    public BloggingContext(DbContextOptions<BloggingContext> options)
+    public ChatRoomContext(DbContextOptions<ChatRoomContext> options)
         :base(options)
     {
         

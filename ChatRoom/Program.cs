@@ -6,14 +6,14 @@ var builder = WebApplication.CreateBuilder(args);
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddNpgsql<Repository.BloggingContext>("Host=192.168.0.111;Database=chatroom;Username=chatroom1;Password=Chat11Room")
-    .AddDbContext<Repository.BloggingContext>();
+builder.Services.AddNpgsql<Repository.ChatRoomContext>("Host=192.168.0.111;Database=chatroom;Username=chatroom1;Password=Chat11Room")
+    .AddDbContext<Repository.ChatRoomContext>();
 //builder.Services.AddEntityFrameworkNpgsql()
-//    .AddDbContext<Repository.BloggingContext>();
+//    .AddDbContext<Repository.ChatRoomContext>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
-builder.Services.AddScoped<IBloggingContext, BloggingContext>();
+builder.Services.AddScoped<IChatRoomContext, ChatRoomContext>();
 builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();

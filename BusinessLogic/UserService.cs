@@ -6,35 +6,35 @@ namespace BusinessLogic;
 
 public class UserService : IUserService
 {
-    private readonly IBloggingContext _bloggingContext;
+    private readonly IChatRoomContext _chatRoomContext;
 
-    public UserService(IBloggingContext bloggingContext)
+    public UserService(IChatRoomContext chatRoomContext)
     {
-        _bloggingContext = bloggingContext;
+        _chatRoomContext = chatRoomContext;
     }
 
     public async Task<User> AddUser(User user)
     {
         var repositoryUser = ToRepositoryUser(user);
-        await _bloggingContext.Users.AddAsync(repositoryUser);
-        await _bloggingContext.SaveChangesAsync();
+        await _chatRoomContext.Users.AddAsync(repositoryUser);
+        await _chatRoomContext.SaveChangesAsync();
         return ToDomainEntity(repositoryUser);
     }
 
     public async Task<User> UpdateUser(User user)
     {
-        var repositoryUser = _bloggingContext.Users.Single(x => x.Id == user.Id);
+        var repositoryUser = _chatRoomContext.Users.Single(x => x.Id == user.Id);
         repositoryUser.FirstName = user.FirstName;
         repositoryUser.LastName = user.LastName;
         repositoryUser.NickNAme = user.NickNAme;
-        await _bloggingContext.SaveChangesAsync();
+        await _chatRoomContext.SaveChangesAsync();
         return ToDomainEntity(repositoryUser);
     }
 
     public Task<IEnumerable<User>> GetUsers()
     {
         //return Task.FromResult<IEnumerable<User>>(new List<User>());
-        return ToDomainEntity(_bloggingContext.Users);
+        return ToDomainEntity(_chatRoomContext.Users);
     }
 
     private async Task<IEnumerable<User>> ToDomainEntity(DbSet<Repository.User> users)

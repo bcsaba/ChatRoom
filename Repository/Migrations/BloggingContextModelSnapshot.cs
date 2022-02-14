@@ -10,7 +10,7 @@ using Repository;
 
 namespace Repository.Migrations
 {
-    [DbContext(typeof(BloggingContext))]
+    [DbContext(typeof(ChatRoomContext))]
     partial class BloggingContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

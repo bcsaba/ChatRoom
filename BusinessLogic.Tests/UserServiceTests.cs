@@ -30,7 +30,7 @@ public static class DbContextMock
 
 public class UserServiceTests
 {
-    private readonly IBloggingContext mockContext;
+    private readonly IChatRoomContext mockContext;
 
     public UserServiceTests()
     {
@@ -48,9 +48,9 @@ public class UserServiceTests
         ((IQueryable<User>)mockSet).ElementType.Returns(data.ElementType);
         ((IQueryable<User>)mockSet).GetEnumerator().Returns(data.GetEnumerator());
 
-        var options = new DbContextOptionsBuilder<BloggingContext>()
+        var options = new DbContextOptionsBuilder<ChatRoomContext>()
             .Options;
-        mockContext = Substitute.For<BloggingContext>(options);
+        mockContext = Substitute.For<ChatRoomContext>(options);
         var tmp = mockContext.Users.Returns(mockSet);
     }
 
@@ -72,7 +72,7 @@ public class UserServiceTests
         // Arrange
         var dbContext = mockContext;
         //dbContext.Users.Returns(Substitute.For<DbSet<User>>());
-        var service = new UserService(Substitute.For<IBloggingContext>());
+        var service = new UserService(Substitute.For<IChatRoomContext>());
         // Act
         var result = await service.GetUsers();
 

@@ -11,7 +11,7 @@ using Repository;
 
 namespace Repository.Migrations
 {
-    [DbContext(typeof(BloggingContext))]
+    [DbContext(typeof(ChatRoomContext))]
     [Migration("20220213000924_InitializeDb")]
     partial class InitializeDb
     {
