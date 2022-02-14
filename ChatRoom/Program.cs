@@ -1,14 +1,20 @@
-using Microsoft.EntityFrameworkCore;
+using BusinessLogic;
+using Repository;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddEntityFrameworkNpgsql().AddDbContext<Repository.BloggingContext>(options =>
-    options.UseNpgsql());
+builder.Services.AddNpgsql<Repository.BloggingContext>("Host=192.168.0.111;Database=chatroom;Username=chatroom1;Password=Chat11Room")
+    .AddDbContext<Repository.BloggingContext>();
+//builder.Services.AddEntityFrameworkNpgsql()
+//    .AddDbContext<Repository.BloggingContext>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
+builder.Services.AddScoped<IBloggingContext, BloggingContext>();
+builder.Services.AddScoped<IUserService, UserService>();
 
 var app = builder.Build();
 
