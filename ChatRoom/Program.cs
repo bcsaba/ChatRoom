@@ -15,6 +15,7 @@ builder.Services.AddSwaggerGen();
 
 builder.Services.AddScoped<IChatRoomContext, ChatRoomContext>();
 builder.Services.AddScoped<IUserService, UserService>();
+builder.Services.AddScoped<IChatRoomService, ChatRoomService>();
 
 var app = builder.Build();
 
