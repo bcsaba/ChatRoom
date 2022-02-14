@@ -13,12 +13,12 @@ public class UserService : IUserService
         _bloggingContext = bloggingContext;
     }
 
-    public async Task<User> AddUser()
+    public async Task<User> AddUser(User user)
     {
         throw new NotImplementedException();
     }
 
-    public Task<User> UpdateUser()
+    public Task<User> UpdateUser(User user)
     {
         throw new NotImplementedException();
     }

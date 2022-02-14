@@ -1,4 +1,5 @@
-﻿using BusinessLogic;
+﻿using System.Net;
+using BusinessLogic;
 using Common;
 using Microsoft.AspNetCore.Mvc;
 
@@ -26,8 +27,19 @@ public class UserController : ControllerBase
     }
 
     [HttpPut]
-    public async Task<ActionResult<User>> Put()
+    public async Task<ActionResult<User>> Put([FromBody] User user)
     {
-        throw new NotImplementedException();
+        try
+        {
+            if(user.Id != null || user.Id > 0)
+                return new OkObjectResult(await _userService.UpdateUser(user));
+
+            return new OkObjectResult(await _userService.AddUser(user));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Failed saving user data");
+            return StatusCode((int) HttpStatusCode.InternalServerError, e.Message);
+        }
     }
 }
