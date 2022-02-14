@@ -15,12 +15,20 @@ public class UserService : IUserService
 
     public async Task<User> AddUser(User user)
     {
-        throw new NotImplementedException();
+        var repositoryUser = ToRepositoryUser(user);
+        await _bloggingContext.Users.AddAsync(repositoryUser);
+        await _bloggingContext.SaveChangesAsync();
+        return ToDomainEntity(repositoryUser);
     }
 
-    public Task<User> UpdateUser(User user)
+    public async Task<User> UpdateUser(User user)
     {
-        throw new NotImplementedException();
+        var repositoryUser = _bloggingContext.Users.Single(x => x.Id == user.Id);
+        repositoryUser.FirstName = user.FirstName;
+        repositoryUser.LastName = user.LastName;
+        repositoryUser.NickNAme = user.NickNAme;
+        await _bloggingContext.SaveChangesAsync();
+        return ToDomainEntity(repositoryUser);
     }
 
     public Task<IEnumerable<User>> GetUsers()
@@ -39,5 +47,26 @@ public class UserService : IUserService
             LastName = x.LastName,
             NickNAme = x.NickNAme
         });
+    }
+
+    private User ToDomainEntity(Repository.User repositoryUser)
+    {
+        return new User
+        {
+            Id = repositoryUser.Id,
+            FirstName = repositoryUser.FirstName,
+            LastName = repositoryUser.LastName,
+            NickNAme = repositoryUser.NickNAme
+        };
+    }
+
+    private Repository.User ToRepositoryUser(User domainUser)
+    {
+        return new Repository.User()
+        {
+            FirstName = domainUser.FirstName,
+            LastName = domainUser.LastName,
+            NickNAme = domainUser.NickNAme
+        };
     }
 }

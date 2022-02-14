@@ -9,6 +9,10 @@ public interface IBloggingContext
     DbSet<RoomEventType> RoomEventTypes { get; set; }
     DbSet<ChatRoom> ChatRooms { get; set; }
     DbSet<Post> Posts { get; set; }
+
+
+    int SaveChanges();
+    Task<int> SaveChangesAsync(CancellationToken cancellationToken = default);
 }
 
 public class BloggingContext : DbContext, IBloggingContext
@@ -20,10 +24,10 @@ public class BloggingContext : DbContext, IBloggingContext
     }
 
     public virtual DbSet<User> Users { get; set; }
-    public DbSet<RoomEvent> RoomEvents { get; set; }
-    public DbSet<RoomEventType> RoomEventTypes { get; set; }
-    public DbSet<ChatRoom> ChatRooms{ get; set; }
-    public DbSet<Post> Posts { get; set; }
+    public virtual DbSet<RoomEvent> RoomEvents { get; set; }
+    public virtual DbSet<RoomEventType> RoomEventTypes { get; set; }
+    public virtual DbSet<ChatRoom> ChatRooms{ get; set; }
+    public virtual DbSet<Post> Posts { get; set; }
 
     protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         => optionsBuilder.UseNpgsql("Host=192.168.0.111;Database=chatroom;Username=chatroom1;Password=Chat11Room");
