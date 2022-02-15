@@ -77,6 +77,18 @@ public class ChatRoomService : IChatRoomService
         return ToDomainEntity(roomEvent);
     }
 
+    public async Task<IEnumerable<ChatRoomEvent>> GetEvents(int chatRoomId, Granularities granularity)
+    {
+        //throw new NotImplementedException();
+        var roomEvents = 
+            _chatRoomContext.RoomEvents.Include(x =>x.EventType).Include(x => x.User)
+                .Where(x => x.ChatRoomId == chatRoomId)
+                .OrderBy(x => x.EventTime);
+        var roomEventsList = await roomEvents.ToListAsync();
+
+        return roomEventsList.Select(ToDomainEntity);
+    }
+
     private ChatRoomEvent ToDomainEntity(RoomEvent roomEvent)
     {
         return new ChatRoomEvent()

@@ -54,4 +54,12 @@ public class ChatRoomController : ControllerBase
         return new OkObjectResult(await _chatRoomService.AddAction(chatRoomId, userId, eventTypeId, eventInfo));
     }
 
+    [HttpGet]
+    [Route("{chatRoomId}/granularity/{granularity}")]
+    public async Task<ActionResult<IEnumerable<ChatRoomEvents>>> GetEvents(
+        [FromRoute] int chatRoomId,
+        [FromRoute] Granularities granularity)
+    {
+        return new OkObjectResult(await _chatRoomService.GetEvents(chatRoomId, granularity));
+    }
 }
