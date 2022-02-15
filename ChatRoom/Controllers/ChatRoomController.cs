@@ -1,5 +1,6 @@
 ﻿using System.Net;
 using BusinessLogic;
+using Common;
 using Microsoft.AspNetCore.Mvc;
 
 namespace ChatRoom.Controllers;
@@ -41,4 +42,17 @@ public class ChatRoomController : ControllerBase
             return StatusCode((int)HttpStatusCode.InternalServerError, e.Message);
         }
     }
+
+    // TODO: work on ChatRoomActionInfo class
+    [HttpPost]
+    [Route("{chatRoomId}/user/{userId}/eventtype/{eventTypeId}")]
+    public async Task<ActionResult<ChatRoomActionInfo>> ChatRoomAction(
+        [FromRoute] int userId,
+        [FromRoute] int chatRoomId,
+        [FromRoute] int eventTypeId,
+        [FromBody] ChatRoomEventInfo eventInfo)
+    {
+        return new OkObjectResult(await _chatRoomService.AddAction(chatRoomId, userId, eventTypeId, eventInfo));
+    }
+
 }

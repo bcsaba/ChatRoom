@@ -11,7 +11,8 @@ public class User
     public string LastName { get; set; }
     public string NickNAme { get; set; }
 
-    public List<Post> Posts { get; set; }
+    //[InverseProperty("PostingUser")]
+    public ICollection<Post> Posts { get; set; }
     [InverseProperty("User")]
     public ICollection<RoomEvent> RoomEvents { get; set; }
     [InverseProperty("TargetUser")]

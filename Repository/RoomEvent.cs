@@ -14,8 +14,10 @@ public class RoomEvent
     public User User { get; set; }
     [ForeignKey("TargetUser")]
     public int? TargetUserId { get; set; }
-    public User TargetUser { get; set; }
+    public User? TargetUser { get; set; }
 
     public DateTime EventTime { get; set; }
+    [ForeignKey("ChatRoom")]
+    public int ChatRoomId { get; set; }
     public ChatRoom ChatRoom { get; set; }
 }
