@@ -12,7 +12,7 @@ public class User
     public string NickNAme { get; set; }
 
     //[InverseProperty("PostingUser")]
-    public ICollection<Post> Posts { get; set; }
+    public ICollection<Comment> Comments { get; set; }
     [InverseProperty("User")]
     public ICollection<RoomEvent> RoomEvents { get; set; }
     [InverseProperty("TargetUser")]

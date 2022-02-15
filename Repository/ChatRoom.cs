@@ -14,5 +14,5 @@ public class ChatRoom
     [InverseProperty("ChatRoom")]
     public ICollection<RoomEvent> RoomEvents  { get; set; }
     //[InverseProperty("RoomPosted")]
-    public ICollection<Post> Posts { get; set; }
+    public ICollection<Comment> Comments { get; set; }
 }

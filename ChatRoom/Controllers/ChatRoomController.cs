@@ -43,10 +43,9 @@ public class ChatRoomController : ControllerBase
         }
     }
 
-    // TODO: work on ChatRoomActionInfo class
     [HttpPost]
     [Route("{chatRoomId}/user/{userId}/eventtype/{eventTypeId}")]
-    public async Task<ActionResult<ChatRoomActionInfo>> ChatRoomAction(
+    public async Task<ActionResult<ChatRoomEvent>> ChatRoomAction(
         [FromRoute] int userId,
         [FromRoute] int chatRoomId,
         [FromRoute] int eventTypeId,

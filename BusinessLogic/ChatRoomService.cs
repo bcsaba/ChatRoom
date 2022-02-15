@@ -3,6 +3,7 @@ using Common;
 using Microsoft.EntityFrameworkCore;
 using Repository;
 using ChatRoom = Common.ChatRoom;
+using Comment = Common.Comment;
 using RoomEventType = Common.RoomEventType;
 using User = Repository.User;
 
@@ -42,13 +43,15 @@ public class ChatRoomService : IChatRoomService
 
     public async Task<ChatRoomEvent> AddAction(int chatRoomId, int userId, int eventTypeId, ChatRoomEventInfo eventInfo)
     {
-        var roomEvent = new RoomEvent()
+        var chatRoom = _chatRoomContext.ChatRooms.Single(x => x.Id == chatRoomId);
+        var user = _chatRoomContext.Users.Single(x => x.Id == userId);
+        var roomEvent = new RoomEvent
         {
-            ChatRoom = _chatRoomContext.ChatRooms.Single(x => x.Id == chatRoomId),
+            ChatRoom = chatRoom,
             ChatRoomId = chatRoomId,
             EventTime = DateTime.UtcNow,
             EventType = _chatRoomContext.RoomEventTypes.Single(x => x.Id == eventTypeId),
-            User = _chatRoomContext.Users.Single(x => x.Id == userId),
+            User = user,
             UserId = userId
         };
         if (eventTypeId == (int) ChatRoomEvents.HighFiveOtherUse)
@@ -56,24 +59,47 @@ public class ChatRoomService : IChatRoomService
             roomEvent.TargetUser = _chatRoomContext.Users.Single(x => x.Id == eventInfo.HighFivedUserId);
         }
 
+        if (eventTypeId == (int)ChatRoomEvents.Comment)
+        {
+            var post = new Repository.Comment
+            {
+                ChatRoom = chatRoom,
+                ChatRoomId = chatRoom.Id,
+                User = user,
+                CommentString = eventInfo.Comment,
+                RoomEvent = roomEvent
+            };
+            await _chatRoomContext.Comments.AddAsync(post);
+        }
+
         await _chatRoomContext.RoomEvents.AddAsync(roomEvent);
         await _chatRoomContext.SaveChangesAsync();
         return ToDomainEntity(roomEvent);
     }
 
-    private ChatRoomEvent ToDomainEntity(RoomEvent repoChatRoom)
+    private ChatRoomEvent ToDomainEntity(RoomEvent roomEvent)
     {
         return new ChatRoomEvent()
         {
-            Id = repoChatRoom.Id,
-            EventTime = repoChatRoom.EventTime,
-            // TODO: include Post here
-            // Post = repoChatRoom.
-            RoomEventType = ToDomainEntity(repoChatRoom.EventType),
-            User = ToDomainEntity(repoChatRoom.User),
-            TargetUser = repoChatRoom.EventType.Id == (int) ChatRoomEvents.HighFiveOtherUse
-                ? ToDomainEntity(repoChatRoom.TargetUser)
+            Id = roomEvent.Id,
+            EventTime = roomEvent.EventTime,
+            RoomEventType = ToDomainEntity(roomEvent.EventType),
+            User = ToDomainEntity(roomEvent.User),
+            TargetUser = roomEvent.EventType.Id == (int) ChatRoomEvents.HighFiveOtherUse
+                ? ToDomainEntity(roomEvent.TargetUser!)
+                : null,
+            Comment = roomEvent.EventType.Id == (int) ChatRoomEvents.Comment
+                ? ToDomainEntity(_chatRoomContext.Comments.Single(x => x.RoomEvent == roomEvent))
                 : null
+        };
+    }
+
+    private Comment ToDomainEntity(Repository.Comment comment)
+    {
+        return new Comment
+        {
+            Id = comment.Id,
+            CommentString = comment.CommentString
         };
     }
 

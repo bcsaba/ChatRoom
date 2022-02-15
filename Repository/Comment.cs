@@ -3,12 +3,12 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace Repository;
 
-public class Post
+public class Comment
 {
     [Key]
     public int Id { get; set; }
 
-    public string Content { get; set; }
+    public string CommentString { get; set; }
 
     [ForeignKey("RoomPosted")]
     public int ChatRoomId { get; set; }
@@ -16,4 +16,7 @@ public class Post
 
     [ForeignKey("PostingUser")]
     public User User { get; set; }
+
+    [ForeignKey("PostEvent")] 
+    public RoomEvent RoomEvent { get; set; }
 }

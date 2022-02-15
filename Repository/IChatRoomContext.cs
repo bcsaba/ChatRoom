@@ -8,7 +8,7 @@ public interface IChatRoomContext
     DbSet<RoomEvent> RoomEvents { get; set; }
     DbSet<RoomEventType> RoomEventTypes { get; set; }
     DbSet<ChatRoom> ChatRooms { get; set; }
-    DbSet<Post> Posts { get; set; }
+    DbSet<Comment> Comments { get; set; }
 
 
     int SaveChanges();
