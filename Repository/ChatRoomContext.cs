@@ -27,6 +27,7 @@ public class ChatRoomContext : DbContext, IChatRoomContext
         base.OnModelCreating(modelBuilder);
 
         modelBuilder.Entity<HourlyChatRoomEvent>().HasNoKey().ToFunction("select * from gethourlychatroomdatafunc()");
+        modelBuilder.Entity<HourlyChatRoomEvent>().ToTable(nameof(HourlyChatRoomEvent), t => t.ExcludeFromMigrations());
 
         //modelBuilder.HasDbFunction(typeof(ChatRoomContext).GetMethod(nameof(GetHourlyChatRoomDataFunc)))
         //    .HasName("getHourlyChatRoomDataFunc");
