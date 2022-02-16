@@ -6,10 +6,10 @@ import { HttpClient } from '@angular/common/http';
   templateUrl: './fetch-data.component.html'
 })
 export class FetchDataComponent {
-  public forecasts: WeatherForecast[] = [];
+  public forecasts: HourlyChatEvent[] = [];
 
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
-    http.get<WeatherForecast[]>(baseUrl + 'weatherforecast').subscribe(result => {
+    http.get<HourlyChatEvent[]>(baseUrl + 'ChatRoom/2/hourlyevents').subscribe(result => {
       this.forecasts = result;
     }, error => console.error(error));
   }
@@ -20,4 +20,13 @@ interface WeatherForecast {
   temperatureC: number;
   temperatureF: number;
   summary: string;
+}
+
+interface HourlyChatEvent {
+  eventTypeId:  number;
+  name: string;
+  countType: number;
+  userInAction: number;
+  targetUser: number;
+  hourPart: string;
 }
