@@ -89,7 +89,7 @@ public class ChatRoomService : IChatRoomService
 
     public async Task<IEnumerable<Common.HourlyChatRoomEvent>> GetHourlyEvents(int chatRoomId)
     {
-            IQueryable<Repository.HourlyChatRoomEvent> chatRoomEvents = _chatRoomContext.HourlyChatRoomEvent.FromSqlRaw<Repository.HourlyChatRoomEvent>("select * from getHourlyChatRoomDataFunc()");
+            IQueryable<Repository.HourlyChatRoomEvent> chatRoomEvents = _chatRoomContext.HourlyChatRoomEvent.FromSqlRaw<Repository.HourlyChatRoomEvent>($"select * from getHourlyChatRoomDataFunc({chatRoomId})");
             var hourlyChatRoomEvents = await chatRoomEvents.ToListAsync<Repository.HourlyChatRoomEvent>();
 
             return hourlyChatRoomEvents.Select(ToDomainEntity);
