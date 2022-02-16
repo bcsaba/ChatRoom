@@ -1,3 +1,4 @@
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using System.Threading.Tasks;
@@ -9,11 +10,149 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Logging;
 using NSubstitute;
 using Xunit;
+using ChatRoom = Common.ChatRoom;
+
+//using ChatRoom = Common.ChatRoom;
 
 namespace ChatRoom.Tests.Controllers;
 
 public class ChatRoomControllerTests
 {
+    [Fact]
+    public async Task WhenGet_ThenShouldReturnCorrectCollectionType()
+    {
+        // Arrange
+        var chatRoomService = Substitute.For<IChatRoomService>();
+        chatRoomService.GetChatRooms().Returns(await Task.FromResult(new List<Common.ChatRoom>()));
+        var controller = new ChatRoomController(chatRoomService, Substitute.For<ILogger<ChatRoomController>>());
+
+        // Act
+        var result = await controller.Get();
+
+        // Assert
+        var objectResult = result.Result as ObjectResult;
+        objectResult!.Value.Should().BeAssignableTo<IEnumerable<Common.ChatRoom>>();
+    }
+
+    [Fact]
+    public async Task WhenGet_ThenShouldCallServiceForData()
+    {
+        // Arrange
+        var chatRoomService = Substitute.For<IChatRoomService>();
+        chatRoomService.GetChatRooms().Returns(await Task.FromResult(new List<Common.ChatRoom>()));
+        var controller = new ChatRoomController(chatRoomService, Substitute.For<ILogger<ChatRoomController>>());
+
+        // Act
+        await controller.Get();
+
+        // Assert
+        await chatRoomService.Received(1).GetChatRooms();
+    }
+
+    [Fact]
+    public async Task WhenGet_ThenDataFromServiceReturned()
+    {
+        // Arrange
+        var chatRoomService = Substitute.For<IChatRoomService>();
+        var chatRooms = new List<Common.ChatRoom> { new() {ChatRoomId = 1, CreateBy = new User {Id = 23}, CreatedById = 23, CreatoinTime = DateTime.UtcNow, Name = "Test"}};
+        chatRoomService.GetChatRooms().Returns(await Task.FromResult(chatRooms));
+        var controller = new ChatRoomController(chatRoomService, Substitute.For<ILogger<ChatRoomController>>());
+
+        // Act
+        var result = await controller.Get();
+
+        // Assert
+        var objectResult = result.Result as ObjectResult;
+        objectResult.Should().NotBeNull();
+        objectResult!.Value.Should().NotBeNull();
+        objectResult!.Value.Should().Be(chatRooms);
+    }
+
+    [Fact]
+    public async Task GivenNewChatRoom_WhenPut_ThenShouldReturnCorrectCollectionType()
+    {
+        // Arrange
+        var chatRoomService = Substitute.For<IChatRoomService>();
+        chatRoomService.AddChatRoom(Arg.Any<Common.ChatRoom>()).Returns(await Task.FromResult(new Common.ChatRoom()));
+        var controller = new ChatRoomController(chatRoomService, Substitute.For<ILogger<ChatRoomController>>());
+
+        // Act
+        var result = await controller.Put(new Common.ChatRoom());
+
+        // Assert
+        var objectResult = result.Result as ObjectResult;
+        objectResult!.Value.Should().BeAssignableTo<Common.ChatRoom>();
+    }
+
+    [Fact]
+    public async Task GivenExistingChatRoom_WhenPut_ThenShouldReturnCorrectCollectionType()
+    {
+        // Arrange
+        var chatRoomService = Substitute.For<IChatRoomService>();
+        chatRoomService.UpdateChatRoom(Arg.Any<Common.ChatRoom>()).Returns(await Task.FromResult(new Common.ChatRoom()));
+        var controller = new ChatRoomController(chatRoomService, Substitute.For<ILogger<ChatRoomController>>());
+
+        // Act
+        var result = await controller.Put(new Common.ChatRoom{ChatRoomId = 2});
+
+        // Assert
+        var objectResult = result.Result as ObjectResult;
+        objectResult!.Value.Should().BeAssignableTo<Common.ChatRoom>();
+    }
+
+    [Fact]
+    public async Task GivenNewChatRoom_WhenPut_ThenServiceCalledToAddNewChatRoomWithProvidedValue()
+    {
+        // Arrange
+        var chatRoomService = Substitute.For<IChatRoomService>();
+        chatRoomService.AddChatRoom(Arg.Any<Common.ChatRoom>()).Returns(await Task.FromResult(new Common.ChatRoom()));
+        var controller = new ChatRoomController(chatRoomService, Substitute.For<ILogger<ChatRoomController>>());
+
+        // Act
+        var chatRoomToAdd = new Common.ChatRoom();
+        var result = await controller.Put(chatRoomToAdd);
+
+        // Assert
+        await chatRoomService.Received(1).AddChatRoom(Arg.Is(chatRoomToAdd));
+    }
+
+    [Fact]
+    public async Task GivenExistingChatRoom_WhenPut_ThenServiceCalledToUpdateChatRoomWithProvidedValue()
+    {
+        // Arrange
+        var chatRoomService = Substitute.For<IChatRoomService>();
+        chatRoomService.UpdateChatRoom(Arg.Any<Common.ChatRoom>()).Returns(await Task.FromResult(new Common.ChatRoom()));
+        var controller = new ChatRoomController(chatRoomService, Substitute.For<ILogger<ChatRoomController>>());
+
+        // Act
+        var chatRoomToUpdate = new Common.ChatRoom { ChatRoomId = 2 };
+        var result = await controller.Put(chatRoomToUpdate);
+
+        // Assert
+        await chatRoomService.Received(1).UpdateChatRoom(chatRoomToUpdate);
+    }
+
+    [Fact]
+    public async Task WhenPutFails_ThenErrorCodeReturned()
+    {
+        // Arrange
+        var chatRoomService = Substitute.For<IChatRoomService>();
+        chatRoomService
+            .When(x =>x.UpdateChatRoom(Arg.Any<Common.ChatRoom>()))
+            .Do(_ => throw new Exception("Failed saving chat room data"));
+        var controller = new ChatRoomController(chatRoomService, Substitute.For<ILogger<ChatRoomController>>());
+
+        // Act
+        var chatRoomToUpdate = new Common.ChatRoom { ChatRoomId = 2 };
+        var result = await controller.Put(chatRoomToUpdate);
+
+        // Assert
+        var objectResult = result.Result as ObjectResult;
+        objectResult.Should().NotBeNull();
+        objectResult!.Value.Should().NotBeNull();
+        objectResult!.Value.Should().Be("Failed saving chat room data");
+    }
+
     [Fact]
     public async Task WHenGetEvent_ThenShouldReturnCorrectEventCollectionType()
     {
@@ -21,6 +160,7 @@ public class ChatRoomControllerTests
         var chatRoomService = Substitute.For<IChatRoomService>();
         chatRoomService.GetMinuteByMinuteEvents(Arg.Any<int>()).Returns(await Task.FromResult(new List<ChatRoomEvent>()));
         var controller = new ChatRoomController(chatRoomService, Substitute.For<ILogger<ChatRoomController>>());
+
         // Act
         var result = await controller.GetMinuteByMinuteEvents(Arg.Any<int>());
 
@@ -48,11 +188,10 @@ public class ChatRoomControllerTests
     }
 
     [Fact]
-    public async Task WHenGetEvent_ThenShouldReturnDatarEceivedFromService()
+    public async Task WHenGetEvent_ThenShouldReturnDataReceivedFromService()
     {
         // Arrange
         const int chatRoomId = 2;
-        const Granularities granularity = Granularities.MinuteByMinute;
         ;
         var chatRoomService = Substitute.For<IChatRoomService>();
         var events_1= new List<ChatRoomEvent>();
@@ -82,7 +221,7 @@ public class ChatRoomControllerTests
 
     [Theory]
     [ClassData(typeof(CalculatorTestData))]
-    public async Task WHenGetEvent_ThenShouldReturnDatarReceivedFromServiceTheory(int chatRoomId, Granularities granularity, List<ChatRoomEvent> events)
+    public async Task WHenGetEvent_ThenShouldReturnDataReceivedFromServiceTheory(int chatRoomId, Granularities granularity, List<ChatRoomEvent> events)
     {
         // Arrange
         var chatRoomService = Substitute.For<IChatRoomService>();

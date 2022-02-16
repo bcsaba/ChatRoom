@@ -51,7 +51,15 @@ public class ChatRoomController : ControllerBase
         [FromRoute] int eventTypeId,
         [FromBody] ChatRoomEventInfo eventInfo)
     {
-        return new OkObjectResult(await _chatRoomService.AddAction(chatRoomId, userId, eventTypeId, eventInfo));
+        try
+        {
+            return new OkObjectResult(await _chatRoomService.AddAction(chatRoomId, userId, eventTypeId, eventInfo));
+        }
+        catch (Exception e)
+        {
+            _logger.LogError("Failed adding chat room event");
+            return StatusCode((int) HttpStatusCode.InternalServerError, e.Message);
+        }
     }
 
     [HttpGet]
