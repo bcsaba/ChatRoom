@@ -1,5 +1,4 @@
-﻿using System.Security.Claims;
-using Common;
+﻿using Common;
 using Microsoft.EntityFrameworkCore;
 using Repository;
 using ChatRoom = Common.ChatRoom;
@@ -77,16 +76,23 @@ public class ChatRoomService : IChatRoomService
         return ToDomainEntity(roomEvent);
     }
 
-    public async Task<IEnumerable<ChatRoomEvent>> GetEvents(int chatRoomId, Granularities granularity)
+    public async Task<IEnumerable<ChatRoomEvent>> GetMinuteByMinuteEvents(int chatRoomId)
     {
-        //throw new NotImplementedException();
-        var roomEvents = 
-            _chatRoomContext.RoomEvents.Include(x =>x.EventType).Include(x => x.User)
-                .Where(x => x.ChatRoomId == chatRoomId)
-                .OrderBy(x => x.EventTime);
-        var roomEventsList = await roomEvents.ToListAsync();
+            var roomEvents =
+                _chatRoomContext.RoomEvents.Include(x => x.EventType).Include(x => x.User)
+                    .Where(x => x.ChatRoomId == chatRoomId)
+                    .OrderBy(x => x.EventTime);
+            var roomEventsList = await roomEvents.ToListAsync();
 
-        return roomEventsList.Select(ToDomainEntity);
+            return roomEventsList.Select(ToDomainEntity);
+    }
+
+    public async Task<IEnumerable<Common.HourlyChatRoomEvent>> GetHourlyEvents(int chatRoomId)
+    {
+            IQueryable<Repository.HourlyChatRoomEvent> chatRoomEvents = _chatRoomContext.HourlyChatRoomEvent.FromSqlRaw<Repository.HourlyChatRoomEvent>("select * from getHourlyChatRoomDataFunc()");
+            var hourlyChatRoomEvents = await chatRoomEvents.ToListAsync<Repository.HourlyChatRoomEvent>();
+
+            return hourlyChatRoomEvents.Select(ToDomainEntity);
     }
 
     private ChatRoomEvent ToDomainEntity(RoomEvent roomEvent)
@@ -103,6 +109,19 @@ public class ChatRoomService : IChatRoomService
             Comment = roomEvent.EventType.Id == (int) ChatRoomEvents.Comment
                 ? ToDomainEntity(_chatRoomContext.Comments.Single(x => x.RoomEvent == roomEvent))
                 : null
+        };
+    }
+
+    private Common.HourlyChatRoomEvent ToDomainEntity(Repository.HourlyChatRoomEvent roomEvent)
+    {
+        return new Common.HourlyChatRoomEvent()
+        {
+            EventTypeId = roomEvent.EventTypeId,
+            Name = roomEvent.Name,
+            HourPart = roomEvent.HourPart,
+            CountType = roomEvent.CountType,
+            TargetUser = roomEvent.TargetUser,
+            UserInAction = roomEvent.UserInAction
         };
     }
 

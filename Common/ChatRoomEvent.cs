@@ -8,5 +8,4 @@ public class ChatRoomEvent
     public User User { get; set; }
     public Comment? Comment { get; set; }
     public User? TargetUser { get; set; }
-
 }

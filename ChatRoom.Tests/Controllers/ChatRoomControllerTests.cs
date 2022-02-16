@@ -19,10 +19,10 @@ public class ChatRoomControllerTests
     {
         // Arrange
         var chatRoomService = Substitute.For<IChatRoomService>();
-        chatRoomService.GetEvents(Arg.Any<int>(), Arg.Any<Granularities>()).Returns(await Task.FromResult(new List<ChatRoomEvent>()));
+        chatRoomService.GetMinuteByMinuteEvents(Arg.Any<int>()).Returns(await Task.FromResult(new List<ChatRoomEvent>()));
         var controller = new ChatRoomController(chatRoomService, Substitute.For<ILogger<ChatRoomController>>());
         // Act
-        var result = await controller.GetEvents(Arg.Any<int>(), Arg.Any<Granularities>());
+        var result = await controller.GetMinuteByMinuteEvents(Arg.Any<int>());
 
         // Assert
         var objectResult = result.Result as ObjectResult;
@@ -38,13 +38,13 @@ public class ChatRoomControllerTests
     {
         // Arrange
         var chatRoomService = Substitute.For<IChatRoomService>();
-        chatRoomService.GetEvents(Arg.Is(chatRoomId), Arg.Is(granularity)).Returns(await Task.FromResult(new List<ChatRoomEvent>()));
+        chatRoomService.GetMinuteByMinuteEvents(Arg.Is(chatRoomId)).Returns(await Task.FromResult(new List<ChatRoomEvent>()));
         var controller = new ChatRoomController(chatRoomService, Substitute.For<ILogger<ChatRoomController>>());
         // Act
-        var result = await controller.GetEvents(chatRoomId, granularity);
+        var result = await controller.GetMinuteByMinuteEvents(chatRoomId);
 
         // Assert
-        await chatRoomService.Received(1).GetEvents(Arg.Is(chatRoomId), Arg.Is(granularity));
+        await chatRoomService.Received(1).GetMinuteByMinuteEvents(Arg.Is(chatRoomId));
     }
 
     [Fact]
@@ -60,16 +60,16 @@ public class ChatRoomControllerTests
             {new() {Id = 2, Comment = new Comment {Id = 2, CommentString = "Test"}}};
         var events_3 = new List<ChatRoomEvent>
             {new() {Id = 3, Comment = new Comment {Id = 3, CommentString = "Test_3"}}};
-        chatRoomService.GetEvents(Arg.Is(chatRoomId), Arg.Is(granularity))
+        chatRoomService.GetMinuteByMinuteEvents(Arg.Is(chatRoomId))
             .Returns(
                 await Task.FromResult(events_1),
                 await Task.FromResult(events_2),
                 await Task.FromResult(events_3));
         var controller = new ChatRoomController(chatRoomService, Substitute.For<ILogger<ChatRoomController>>());
         // Act
-        var result_1 = await controller.GetEvents(chatRoomId, granularity);
-        var result_2 = await controller.GetEvents(chatRoomId, granularity);
-        var result_3 = await controller.GetEvents(chatRoomId, granularity);
+        var result_1 = await controller.GetMinuteByMinuteEvents(chatRoomId);
+        var result_2 = await controller.GetMinuteByMinuteEvents(chatRoomId);
+        var result_3 = await controller.GetMinuteByMinuteEvents(chatRoomId);
 
         // Assert
         var objectResult_1 = result_1.Result as ObjectResult;
@@ -86,11 +86,11 @@ public class ChatRoomControllerTests
     {
         // Arrange
         var chatRoomService = Substitute.For<IChatRoomService>();
-        chatRoomService.GetEvents(Arg.Is(chatRoomId), Arg.Is(granularity))
+        chatRoomService.GetMinuteByMinuteEvents(Arg.Is(chatRoomId))
             .Returns(events);
         var controller = new ChatRoomController(chatRoomService, Substitute.For<ILogger<ChatRoomController>>());
         // Act
-        var result = await controller.GetEvents(chatRoomId, granularity);
+        var result = await controller.GetMinuteByMinuteEvents(chatRoomId);
 
         // Assert
         var objectResult = result.Result as ObjectResult;

@@ -44,7 +44,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("CreatedById");
 
-                    b.ToTable("ChatRooms");
+                    b.ToTable("ChatRooms", (string)null);
                 });
 
             modelBuilder.Entity("Repository.Comment", b =>
@@ -76,7 +76,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("PostingUser");
 
-                    b.ToTable("Comments");
+                    b.ToTable("Comments", (string)null);
                 });
 
             modelBuilder.Entity("Repository.RoomEvent", b =>
@@ -112,7 +112,7 @@ namespace Repository.Migrations
 
                     b.HasIndex("UserId");
 
-                    b.ToTable("RoomEvents");
+                    b.ToTable("RoomEvents", (string)null);
                 });
 
             modelBuilder.Entity("Repository.RoomEventType", b =>
@@ -129,7 +129,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("RoomEventTypes");
+                    b.ToTable("RoomEventTypes", (string)null);
                 });
 
             modelBuilder.Entity("Repository.User", b =>
@@ -154,7 +154,7 @@ namespace Repository.Migrations
 
                     b.HasKey("Id");
 
-                    b.ToTable("Users");
+                    b.ToTable("Users", (string)null);
                 });
 
             modelBuilder.Entity("Repository.ChatRoom", b =>

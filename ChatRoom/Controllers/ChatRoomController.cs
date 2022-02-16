@@ -55,11 +55,19 @@ public class ChatRoomController : ControllerBase
     }
 
     [HttpGet]
-    [Route("{chatRoomId}/granularity/{granularity}")]
-    public async Task<ActionResult<IEnumerable<ChatRoomEvents>>> GetEvents(
-        [FromRoute] int chatRoomId,
-        [FromRoute] Granularities granularity)
+    [Route("{chatRoomId}/minutebyminuteevents")]
+    public async Task<ActionResult<IEnumerable<ChatRoomEvents>>> GetMinuteByMinuteEvents(
+        [FromRoute] int chatRoomId)
     {
-        return new OkObjectResult(await _chatRoomService.GetEvents(chatRoomId, granularity));
+        return new OkObjectResult(await _chatRoomService.GetMinuteByMinuteEvents(chatRoomId));
     }
+
+    [HttpGet]
+    [Route("{chatRoomId}/hourlyevents")]
+    public async Task<ActionResult<IEnumerable<HourlyChatRoomEvent>>> GetHourlyEvents(
+        [FromRoute] int chatRoomId)
+    {
+        return new OkObjectResult(await _chatRoomService.GetHourlyEvents(chatRoomId));
+    }
+
 }
