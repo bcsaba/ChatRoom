@@ -11,6 +11,16 @@ export class FetchDataComponent {
   constructor(http: HttpClient, @Inject('BASE_URL') baseUrl: string) {
     http.get<HourlyChatEvent[]>(baseUrl + 'ChatRoom/2/hourlyevents').subscribe(result => {
       this.forecasts = result;
+
+      var prevHourPart = "";
+      this.forecasts.forEach(element => {
+        if (element.hourPart == prevHourPart) {
+          element.sameHourAsPrevious = true;
+        } else {
+          element.sameHourAsPrevious = false;
+          prevHourPart = element.hourPart
+        }
+      });
     }, error => console.error(error));
   }
 }
@@ -29,4 +39,5 @@ interface HourlyChatEvent {
   userInAction: number;
   targetUser: number;
   hourPart: string;
+  sameHourAsPrevious: boolean;
 }
