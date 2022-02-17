@@ -7,7 +7,7 @@ import { FormGroup, FormBuilder } from '@angular/forms';
   templateUrl: './fetch-data.component.html'
 })
 export class FetchDataComponent implements OnInit {
-  public forecasts: HourlyChatEvent[] = [];
+  public roomEvents: HourlyChatEvent[] = [];
   public chatRooms: ChatRoom[] = [];
   contactForm: FormGroup;
 
@@ -26,10 +26,10 @@ export class FetchDataComponent implements OnInit {
   }
 
   private processRoomEvents(result: HourlyChatEvent[]) {
-    this.forecasts = result;
+    this.roomEvents = result;
 
     var prevHourPart = "";
-    this.forecasts.forEach(element => {
+    this.roomEvents.forEach(element => {
       if (element.hourPart == prevHourPart) {
         element.sameHourAsPrevious = true;
       } else {
@@ -57,13 +57,6 @@ export class FetchDataComponent implements OnInit {
       this.processRoomEvents(result);
     }, error => console.error(error));
   }
-}
-
-interface WeatherForecast {
-  date: string;
-  temperatureC: number;
-  temperatureF: number;
-  summary: string;
 }
 
 interface HourlyChatEvent {

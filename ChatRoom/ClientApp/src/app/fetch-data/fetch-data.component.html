@@ -1,6 +1,6 @@
 <h1 id="tableLabel">Hourly chat room events</h1>
 
-<p *ngIf="!forecasts"><em>Loading...</em></p>
+<p *ngIf="!roomEvents"><em>Loading...</em></p>
 
 <form [formGroup]="contactForm">
   <select formControlName="room" (change)="onChatRoomSelectionChange">
@@ -8,7 +8,7 @@
   </select>
 </form>
 
-<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="forecasts">
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="roomEvents">
   <thead>
     <tr>
       <th>Date</th>
@@ -17,19 +17,19 @@
     </tr>
   </thead>
   <tbody>
-    <tr *ngFor="let forecast of forecasts">
-      <ng-container *ngIf="!forecast.sameHourAsPrevious">
-        <td>{{ forecast.hourPart.substr(0, 10) }}</td>
-        <td>{{ forecast.hourPart.substr(11, 5) }}</td>
+    <tr *ngFor="let roomEvent of roomEvents">
+      <ng-container *ngIf="!roomEvent.sameHourAsPrevious">
+        <td>{{ roomEvent.hourPart.substr(0, 10) }}</td>
+        <td>{{ roomEvent.hourPart.substr(11, 5) }}</td>
       </ng-container>
-      <ng-container *ngIf="forecast.sameHourAsPrevious">
+      <ng-container *ngIf="roomEvent.sameHourAsPrevious">
         <td></td>
         <td></td>
       </ng-container>
-      <td *ngIf="forecast.eventTypeId == 1">{{ forecast.countType }} person entered</td>
-      <td *ngIf="forecast.eventTypeId == 2">{{ forecast.countType }} left</td>
-      <td *ngIf="forecast.eventTypeId == 3">{{ forecast.countType }} comments</td>
-      <td *ngIf="forecast.eventTypeId == 4">{{ forecast.userInAction }} high-fived {{ forecast.targetUser }} other people</td>
+      <td *ngIf="roomEvent.eventTypeId == 1">{{ roomEvent.countType }} person entered</td>
+      <td *ngIf="roomEvent.eventTypeId == 2">{{ roomEvent.countType }} left</td>
+      <td *ngIf="roomEvent.eventTypeId == 3">{{ roomEvent.countType }} comments</td>
+      <td *ngIf="roomEvent.eventTypeId == 4">{{ roomEvent.userInAction }} high-fived {{ roomEvent.targetUser }} other people</td>
     </tr>
   </tbody>
 </table>
