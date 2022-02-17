@@ -2,6 +2,12 @@
 
 <p *ngIf="!forecasts"><em>Loading...</em></p>
 
+<form [formGroup]="contactForm">
+  <select formControlName="room" (change)="onChatRoomSelectionChange">
+    <option *ngFor="let chatRoom of chatRooms" [ngValue]="chatRoom.chatRoomId">{{chatRoom.name}}</option>
+  </select>
+</form>
+
 <table class='table table-striped' aria-labelledby="tableLabel" *ngIf="forecasts">
   <thead>
     <tr>
