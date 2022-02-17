@@ -15,6 +15,8 @@ The initial solution was generaetd by Visual Studio as an Angular project templa
 - `BusinessLogic.Tests` - Unit tests for the application business logic code inside the `BusinessLogic` folder.
 - `Common` - Project for the cross-project DTO classes.
 - `Repository` - Database access layer
+- `images` - Contains images for README documentation.
+- `database` - Contains the database backup.
 
 ## Used technologies, libraries ##
 
@@ -24,6 +26,11 @@ The initial solution was generaetd by Visual Studio as an Angular project templa
 - **Angular**_ is used for the client side implementation.
 - **Swagger** is used for visual representationa of the REST API end points and for generating test data through the generated Swagger UI.
 - **PostgreSQL** is used as the solution backend database.
+
+## Note ##
+
+The application uses a hard coded connection string at the moment at the service builder logic. (Thatf should really come from some application configuration.)
+If you need to change it you can find it currently in the file `ChatRoom/Program.cs` on line number 9.
 
 # Application usage #
 
