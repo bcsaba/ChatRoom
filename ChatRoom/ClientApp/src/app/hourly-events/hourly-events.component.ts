@@ -3,10 +3,10 @@ import { HttpClient } from '@angular/common/http';
 import { FormGroup, FormBuilder } from '@angular/forms';
 
 @Component({
-  selector: 'app-fetch-data',
-  templateUrl: './fetch-data.component.html'
+  selector: 'app-hourly-events',
+  templateUrl: './hourly-events.component.html'
 })
-export class FetchDataComponent implements OnInit {
+export class HourlyEventsComponent implements OnInit {
   public roomEvents: HourlyChatEvent[] = [];
   public chatRooms: ChatRoom[] = [];
   contactForm: FormGroup;
@@ -52,7 +52,6 @@ export class FetchDataComponent implements OnInit {
   }
 
   onChatRoomSelectionChange(roomId: number){
-    console.log(roomId);
     this.http.get<HourlyChatEvent[]>(this.baseUrl + `ChatRoom/${roomId}/hourlyevents`).subscribe(result => {
       this.processRoomEvents(result);
     }, error => console.error(error));
