@@ -9,6 +9,7 @@ import { NavMenuComponent } from './nav-menu/nav-menu.component';
 import { HomeComponent } from './home/home.component';
 import { CounterComponent } from './counter/counter.component';
 import { HourlyEventsComponent } from './hourly-events/hourly-events.component';
+import { EventsByMinuteComponent } from './events-by-minute/events-by-minute.component';
 
 @NgModule({
   declarations: [
@@ -16,7 +17,8 @@ import { HourlyEventsComponent } from './hourly-events/hourly-events.component';
     NavMenuComponent,
     HomeComponent,
     CounterComponent,
-    HourlyEventsComponent
+    HourlyEventsComponent,
+    EventsByMinuteComponent
   ],
   imports: [
     BrowserModule.withServerTransition({ appId: 'ng-cli-universal' }),
@@ -26,6 +28,7 @@ import { HourlyEventsComponent } from './hourly-events/hourly-events.component';
       { path: '', component: HomeComponent, pathMatch: 'full' },
       { path: 'counter', component: CounterComponent },
       { path: 'hourly-events', component: HourlyEventsComponent },
+      { path: 'events-by-minute', component: EventsByMinuteComponent }
     ])
   ],
   providers: [],
