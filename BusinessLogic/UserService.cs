@@ -26,7 +26,7 @@ public class UserService : IUserService
         var repositoryUser = _chatRoomContext.Users.Single(x => x.Id == user.Id);
         repositoryUser.FirstName = user.FirstName;
         repositoryUser.LastName = user.LastName;
-        repositoryUser.NickNAme = user.NickNAme;
+        repositoryUser.NickNAme = user.NickName;
         await _chatRoomContext.SaveChangesAsync();
         return ToDomainEntity(repositoryUser);
     }
@@ -45,7 +45,7 @@ public class UserService : IUserService
             Id = x.Id,
             FirstName = x.FirstName,
             LastName = x.LastName,
-            NickNAme = x.NickNAme
+            NickName = x.NickNAme
         });
     }
 
@@ -56,7 +56,7 @@ public class UserService : IUserService
             Id = repositoryUser.Id,
             FirstName = repositoryUser.FirstName,
             LastName = repositoryUser.LastName,
-            NickNAme = repositoryUser.NickNAme
+            NickName = repositoryUser.NickNAme
         };
     }
 
@@ -66,7 +66,7 @@ public class UserService : IUserService
         {
             FirstName = domainUser.FirstName,
             LastName = domainUser.LastName,
-            NickNAme = domainUser.NickNAme
+            NickNAme = domainUser.NickName
         };
     }
 }

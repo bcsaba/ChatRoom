@@ -174,7 +174,7 @@ public class ChatRoomService : IChatRoomService
             Id = repositoryUser.Id,
             FirstName = repositoryUser.FirstName,
             LastName = repositoryUser.LastName,
-            NickNAme = repositoryUser.NickNAme
+            NickName = repositoryUser.NickNAme
         };
     }
     private Repository.ChatRoom ToRepositoryChatRoom(ChatRoom chatRoom)

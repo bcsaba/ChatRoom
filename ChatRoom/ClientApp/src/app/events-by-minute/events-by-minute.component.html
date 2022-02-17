@@ -1,1 +1,30 @@
-<p>events-by-minute works!</p>
+<h1 id="tableLabel">Minute by minute room events</h1>
+
+<p *ngIf="!roomEvents"><em>Loading...</em></p>
+
+<form [formGroup]="contactForm">
+  <select formControlName="room" (change)="onChatRoomSelectionChange">
+    <option *ngFor="let chatRoom of chatRooms" [ngValue]="chatRoom.chatRoomId">{{chatRoom.name}}</option>
+  </select>
+</form>
+
+<table class='table table-striped' aria-labelledby="tableLabel" *ngIf="roomEvents">
+    <thead>
+      <tr>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Event</th>
+      </tr>
+    </thead>
+    <tbody>
+      <tr *ngFor="let roomEvent of roomEvents">
+          <td>{{ roomEvent.eventTime.substr(0, 10) }}</td>
+          <td>{{ roomEvent.eventTime.substr(11, 5) }}</td>
+          <td *ngIf="roomEvent.roomEventType.id == 1">{{ roomEvent.user.nickName }} enters the room</td>
+          <td *ngIf="roomEvent.roomEventType.id == 2">{{ roomEvent.user.nickName }} leaves</td>
+          <td *ngIf="roomEvent.roomEventType.id == 3">{{ roomEvent.user.nickName }} comments: "{{roomEvent.comment.commentString}}"</td>
+          <td *ngIf="roomEvent.roomEventType.id == 4">{{ roomEvent.user.nickName }} high-fives {{ roomEvent.targetUser.nickName }}</td>
+      </tr>
+    </tbody>
+  </table>
+  

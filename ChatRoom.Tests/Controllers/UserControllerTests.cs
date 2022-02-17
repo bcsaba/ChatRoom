@@ -49,7 +49,7 @@ public class UserControllerTests
     public async Task WHenPutUser_THenShouldReturnCorrectUserCollectionType()
     {
         // Arrange
-        User testUser = new User() {FirstName = "Joe", LastName = "Test", NickNAme = "TestJ"};
+        User testUser = new User() {FirstName = "Joe", LastName = "Test", NickName = "TestJ"};
         var userService = Substitute.For<IUserService>();
         userService.AddUser(Arg.Any<User>()).Returns(await Task.FromResult(testUser));
         var controller = new UserController(userService, Substitute.For<ILogger<UserController>>());
@@ -65,7 +65,7 @@ public class UserControllerTests
     public async Task WHenPutUserAndHasNoId_THenCallUSerServicePutUser()
     {
         // Arrange
-        User testUser = new User() { FirstName = "Joe", LastName = "Test", NickNAme = "TestJ" };
+        User testUser = new User() { FirstName = "Joe", LastName = "Test", NickName = "TestJ" };
         var userService = Substitute.For<IUserService>();
         userService.AddUser(Arg.Any<User>()).Returns(await Task.FromResult(testUser));
         var controller = new UserController(userService, Substitute.For<ILogger<UserController>>());
@@ -80,7 +80,7 @@ public class UserControllerTests
     public async Task WHenPutUserAndHasId_THenCallUSerServiceUpdateUser()
     {
         // Arrange
-        User testUser = new User() { Id = 1, FirstName = "Joe", LastName = "Test", NickNAme = "TestJ" };
+        User testUser = new User() { Id = 1, FirstName = "Joe", LastName = "Test", NickName = "TestJ" };
         var userService = Substitute.For<IUserService>();
         userService.UpdateUser(Arg.Any<User>()).Returns(await Task.FromResult(testUser));
         var controller = new UserController(userService, Substitute.For<ILogger<UserController>>());
@@ -95,7 +95,7 @@ public class UserControllerTests
     public async Task WHenPutUserFails_THenInternalServerErrorReturned()
     {
         // Arrange
-        User testUser = new User() { Id = 1, FirstName = "Joe", LastName = "Test", NickNAme = "TestJ" };
+        User testUser = new User() { Id = 1, FirstName = "Joe", LastName = "Test", NickName = "TestJ" };
         var userService = Substitute.For<IUserService>();
         userService.When(x => x.UpdateUser(Arg.Any<User>()))
             .Do(x => throw new Exception("Update user data failed"));
