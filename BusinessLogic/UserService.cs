@@ -33,7 +33,6 @@ public class UserService : IUserService
 
     public Task<IEnumerable<User>> GetUsers()
     {
-        //return Task.FromResult<IEnumerable<User>>(new List<User>());
         return ToDomainEntity(_chatRoomContext.Users);
     }
 

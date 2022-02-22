@@ -2,14 +2,18 @@ using BusinessLogic;
 using Repository;
 
 var builder = WebApplication.CreateBuilder(args);
+var config = new ConfigurationBuilder()
+    .SetBasePath(Directory.GetCurrentDirectory())
+    .AddJsonFile("appsettings.json")
+    .Build();
+
 
 // Add services to the container.
 
 builder.Services.AddControllersWithViews();
-builder.Services.AddNpgsql<Repository.ChatRoomContext>("Host=192.168.0.111;Database=chatroom;Username=chatroom1;Password=Chat11Room")
+var connStr = config["ConnectionString"];
+builder.Services.AddNpgsql<Repository.ChatRoomContext>(connStr)
     .AddDbContext<Repository.ChatRoomContext>();
-//builder.Services.AddEntityFrameworkNpgsql()
-//    .AddDbContext<Repository.ChatRoomContext>();
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 
